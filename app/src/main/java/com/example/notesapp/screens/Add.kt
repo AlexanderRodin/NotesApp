@@ -63,7 +63,7 @@ fun AddScreen(navController: NavHostController) {
 
 @Preview(showBackground = true)
 @Composable
-fun prevAddScreen() {
+fun PrevAddScreen() {
     NotesAppTheme {
         AddScreen(navController = rememberNavController())
     }

@@ -58,7 +58,7 @@ fun NoteScreen(navController: NavHostController) {
 
 @Preview(showBackground = true)
 @Composable
-fun prevNoteScreen(){
+fun PrevNoteScreen(){
 NotesAppTheme {
     NoteScreen(navController = rememberNavController())
 }}
