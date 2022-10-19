@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import android.view.Display
 import androidx.lifecycle.*
+import com.example.notesapp.database.firebase.AppFirebaseRepository
 import com.example.notesapp.database.room.AppRoomDatabase
 import com.example.notesapp.database.room.repository.RoomRepository
 import com.example.notesapp.model.Note
@@ -25,6 +26,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val dao = AppRoomDatabase.getInstance(context = context).getRoomDao()
                 REPOSITORY = RoomRepository(dao)
                 onSuccess()
+            }
+            TYPE_FIREBASE ->{
+                REPOSITORY = AppFirebaseRepository()
+                REPOSITORY.connectToDatabase(
+                    {onSuccess()},
+                    {Log.d("checkData","Error: ${it}")}
+                )
             }
         }
     }
