@@ -28,6 +28,7 @@ import com.example.notesapp.MainViewModelFactory
 import com.example.notesapp.model.Note
 import com.example.notesapp.navigation.NavRoute
 import com.example.notesapp.ui.theme.NotesAppTheme
+import com.example.notesapp.utils.Constants.Keys.ADD_ICONS
 
 @Composable
 fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
@@ -40,7 +41,7 @@ fun MainScreen(navController: NavHostController, viewModel: MainViewModel) {
                 }) {
                 Icon(
                     imageVector = Icons.Filled.Add,
-                    contentDescription = "Add icons",
+                    contentDescription = ADD_ICONS,
                     tint = Color.White
                 )
             }
@@ -62,7 +63,7 @@ fun NoteItem(note: Note, navController: NavHostController) {
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 24.dp)
             .clickable {
-                navController.navigate(NavRoute.Note.route)
+                navController.navigate(NavRoute.Note.route + "/${note.id}")
             },
         elevation = 6.dp
     ) {
