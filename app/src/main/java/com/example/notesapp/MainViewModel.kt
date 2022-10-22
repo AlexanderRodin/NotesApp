@@ -2,7 +2,6 @@ package com.example.notesapp
 
 import android.app.Application
 import android.util.Log
-import android.view.Display
 import androidx.lifecycle.*
 import com.example.notesapp.database.firebase.AppFirebaseRepository
 import com.example.notesapp.database.room.AppRoomDatabase
