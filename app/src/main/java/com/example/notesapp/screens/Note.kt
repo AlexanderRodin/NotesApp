@@ -1,6 +1,7 @@
 package com.example.notesapp.screens
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -13,9 +14,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.compose.rememberNavController
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.notesapp.MainViewModel
 import com.example.notesapp.MainViewModelFactory
 import com.example.notesapp.model.Note
@@ -25,18 +26,30 @@ import com.example.notesapp.utils.Constants.Keys.DELETE
 import com.example.notesapp.utils.Constants.Keys.EDIT_NOTE
 import com.example.notesapp.utils.Constants.Keys.EMPTY
 import com.example.notesapp.utils.Constants.Keys.NAV_BACK
-import com.example.notesapp.utils.Constants.Keys.NONE
 import com.example.notesapp.utils.Constants.Keys.SUBTITLE
 import com.example.notesapp.utils.Constants.Keys.TITLE
 import com.example.notesapp.utils.Constants.Keys.UPDATE
 import com.example.notesapp.utils.Constants.Keys.UPDATE_NOTE
+import com.example.notesapp.utils.DB_TYPE
+import com.example.notesapp.utils.TYPE_FIREBASE
+import com.example.notesapp.utils.TYPE_ROOM
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteId: String?) {
     val notes = viewModel.readAllNote().observeAsState(listOf()).value
-    val note = notes.firstOrNull { it.id == noteId?.toInt() } ?: Note(title = NONE, subtitle = NONE)
+    val note = when(DB_TYPE){
+        TYPE_ROOM -> {
+            Log.d("checkData", "Check Room DB")
+            notes.firstOrNull{it.id == noteId?.toInt()} ?: Note()
+        }
+        TYPE_FIREBASE -> {
+            Log.d("checkData", "Check Firebase DB")
+            notes.firstOrNull{it.firebaseId == noteId} ?: Note()
+        }
+        else -> Note()
+    }
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var title by remember { mutableStateOf(EMPTY) }
@@ -75,7 +88,7 @@ fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteI
                         modifier = Modifier.padding(top = 16.dp),
                         onClick = {
                             viewModel.updateNote(note =
-                            Note(id = note.id, title = title, subtitle = subtitle)
+                            Note(id = note.id, title = title, subtitle = subtitle, firebaseId = note.firebaseId)
                             ) {
                                 navController.navigate(NavRoute.Main.route)
                             }
