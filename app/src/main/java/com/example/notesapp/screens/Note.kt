@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun NoteScreen(navController: NavHostController, viewModel: MainViewModel, noteId: String?) {
     val notes = viewModel.readAllNote().observeAsState(listOf()).value
-    val note = when(DB_TYPE){
+    val note = when(DB_TYPE.value){
         TYPE_ROOM -> {
             Log.d("checkData", "Check Room DB")
             notes.firstOrNull{it.id == noteId?.toInt()} ?: Note()

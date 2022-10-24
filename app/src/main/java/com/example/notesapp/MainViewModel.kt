@@ -2,17 +2,17 @@ package com.example.notesapp
 
 import android.app.Application
 import android.util.Log
-import androidx.lifecycle.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.notesapp.database.firebase.AppFirebaseRepository
 import com.example.notesapp.database.room.AppRoomDatabase
 import com.example.notesapp.database.room.repository.RoomRepository
 import com.example.notesapp.model.Note
-import com.example.notesapp.utils.REPOSITORY
-import com.example.notesapp.utils.TYPE_FIREBASE
-import com.example.notesapp.utils.TYPE_ROOM
+import com.example.notesapp.utils.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.IllegalArgumentException
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -63,6 +63,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun readAllNote() = REPOSITORY.readAll
+
+    fun signOut(onSuccess: () -> Unit){
+        when(DB_TYPE.value){
+            TYPE_FIREBASE, TYPE_ROOM ->{
+                REPOSITORY.signOut()
+                DB_TYPE.value = Constants.Keys.EMPTY
+                onSuccess()
+            }
+            else -> {Log.d("checkData", "signOut: ELSE: ${DB_TYPE.value}")}
+        }
+    }
 
 }
 

@@ -1,11 +1,14 @@
 package com.example.notesapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.example.notesapp.MainViewModel
-import com.example.notesapp.screens.*
+import com.example.notesapp.screens.AddScreen
+import com.example.notesapp.screens.MainScreen
+import com.example.notesapp.screens.NoteScreen
+import com.example.notesapp.screens.StartScreen
 import com.example.notesapp.utils.Constants
 import com.example.notesapp.utils.Constants.Screens.ADD_SCREEN
 import com.example.notesapp.utils.Constants.Screens.MAIN_SCREEN
@@ -20,8 +23,7 @@ sealed class NavRoute(val route: String) {
 }
 
 @Composable
-fun NotesNavHost(mViewModel: MainViewModel) {
-    val navController = rememberNavController()
+fun NotesNavHost(mViewModel: MainViewModel, navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = NavRoute.Start.route) {
         composable(NavRoute.Start.route) {
